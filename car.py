@@ -21,6 +21,7 @@ class Car():
 		self.color = color
 		self.track = track
 		self.index = index
+  self.length = 4
 	
 	def accel(self, time):
 		self.speed = min(self.speed + self.acc*time, self.MAX_SPEED)
@@ -284,8 +285,13 @@ class Track(pg.sprite.Sprite):
 			stopped_cars = 0
 			for c in self.cars:
 				if c in self.hit:
-					if GRAPHICS: pg.draw.circle(self.image, c.color, 
-						(int(c.location[0]), int(c.location[1])), 3, 0)
+					if GRAPHICS:
+      bx = c.location[0] - (np.cos(c.theta) + np.sin(c.theta))*c.length
+      ex = c.location[0] + (np.cos(c.theta) + np.sin(c.theta))*c.length
+      by = c.location[1] - (-np.cos(c.theta) + np.sin(c.theta))*c.length
+      ey = c.location[1] + (-np.cos(c.theta) + np.sin(c.theta))*c.length
+      pg.draw.line(self.image, c.color, 
+						(bx, by), (ex,ey), 2)
 					continue
 				if c.speed < 2 and total_time > 5: stopped_cars += 1
 				old_loc = [c.location[0], c.location[1]]
